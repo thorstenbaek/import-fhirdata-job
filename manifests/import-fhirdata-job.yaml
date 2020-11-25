@@ -1,0 +1,41 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: import-fhirdata-job
+spec:  
+  template:    
+    spec:      
+      initContainers:
+      - name: check-db-ready
+        image: postgres:11.5
+        command: ['sh', '-c', 
+          'echo checking database;
+          until pg_isready -h postgres-postgresql -p 5432; 
+          do echo waiting for database; sleep 2; done;']
+      containers:
+      - name: import-fhirdata-job
+        image: thorstenbaek/import-fhirdata:v0.0.0.1
+        env:
+        - name: PGHOST
+          value: "postgres-postgresql"
+        - name: PGPORT
+          value: "5432"
+        - name: PGUSER
+          value: "postgres"
+        - name: PGPASSWORD
+          value: "postgres"        
+        # command: moved to dockerfile
+        # - "/bin/bash"
+        # - "-c"
+        # - "echo 'creating fhirbase database'; 
+        #    psql -U postgres -c 'create database fhirbase;'; 
+        #    echo 'fhirbase database created'; 
+        #    fhirbase -d fhirbase --fhir=3.3.0 init;
+        #    echo 'fhirbase database initialized'; 
+        #    echo processing ndjson files;
+        #    FILES='/usr/local/fhir-data/*' ;
+        #    for f in $FILES; 
+        #      do echo Processing $f file...;
+        #    fhirbase -d fhirbase load --mode=insert $f; 
+        #    done; "          
+      restartPolicy: Never
