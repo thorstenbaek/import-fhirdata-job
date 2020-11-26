@@ -9,7 +9,7 @@ CMD ["/bin/bash","-c", \
     "echo 'creating fhirbase database'; \
     psql -U postgres -c 'create database fhirbase;'; \
     echo 'fhirbase database created'; \
-    fhirbase -d fhirbase --fhir=3.3.0 init; \
+    fhirbase -d fhirbase --fhir=1.0.2 init; \
     echo 'fhirbase database initialized'; \
     echo processing ndjson files; \
     FILES='/usr/local/fhir-data/*' ; \
