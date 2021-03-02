@@ -14,7 +14,7 @@ spec:
           do echo waiting for database; sleep 2; done;']
       containers:
       - name: import-fhirdata-job
-        image: thorstenbaek/import-fhirdata:v0.0.0.2
+        image: thorstenbaek/import-fhirdata:v1.0.0.3
         env:
         - name: PGHOST
           value: "postgres-postgresql"
